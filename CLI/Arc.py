@@ -1,21 +1,12 @@
 # class for arcs
 from Petrinetobjects import Petrinetobject
-from Place import Place
-from Transition import Transition
-
 
 class Arc(object):
     """docstring for Arc."""
 
     def __init__(self, name):
         self.name = name
-
-    Place place
-    Transition transition
-    Direction_status status
-
-    def can_fire():
-
-
-
-    def fire():
+    def initialize(self,place_name,transition_name,status):
+        self.place = place_name
+        self.transition = transition_name
+        self.status = status

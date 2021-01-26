@@ -27,6 +27,3 @@ class Place(Petrinetobject):
 
     def add_tokens(amount):
         self.tokens += amount
-
-    def remove_tokens(amount):
-        self.tokens -= amount
