@@ -1,33 +1,37 @@
-from Petrinetobjects import Petrinetobject
+
 from Arc import Arc
 from tokenslist import Tokenslist
 
-class Transition(Petrinetobject):
+class Transition:
     """docstring for Transition."""
 
-    def __init__(self,name,nin=1):
+    def __init__(self,name):
         self.name = name
-        self.nin = nin
         self.incoming_arcs = []
         self.outgoing_arcs =[]
 
-    def can_fire(self,tokenslistobj):
-        can = True
+    def can_fire(self,state,placeindex):
         for arc in self.incoming_arcs:
-            can = can & tokenslistobj.hasatleast(arc.place,self.nin)
-        return can;
+            if state[placeindex[arc.frm]]==0:
+                return False
+        return True
 
-    def fire(self,tokenslistobj):
+    def fire(self,state,placeindex):
+        l = []
+        for x in state:
+            l.append(x)
         for arc in self.incoming_arcs:
-            tokenslistobj.alter_tokens_at_place(arc.place,-self.nin)
+            l[placeindex[arc.frm]]=0
         for arc in self.outgoing_arcs:
-            tokenslistobj.alter_tokens_at_place(arc.place,self.nin)
+            l[placeindex[arc.to]]=1
+        return l
 
     def add_arc(self,arc):
-        if arc.status == 0:
+        if arc.status == "input":
             self.incoming_arcs.append(arc)
         else:
             self.outgoing_arcs.append(arc)
+
     def describe(self):
         print("name :-",self.name)
         print("incoming arcs")
@@ -38,3 +42,6 @@ class Transition(Petrinetobject):
         for arc in self.outgoing_arcs:
             print("arc Place",arc.place)
             print("arc transition",arc.transition)
+
+    def __str__(self):
+        return self.name

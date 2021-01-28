@@ -1,8 +1,8 @@
 # This is the Place class.
-from Petrinetobjects import Petrinetobject
 
 
-class Place(Petrinetobject):
+
+class Place:
     """docstring for Place.
     Each place object has the following features.
     1. no.of tokens at current place.
@@ -14,16 +14,19 @@ class Place(Petrinetobject):
         self.tokens = start
 
     def get_values(self):
-        print(self.tokens,self.get_name())
+        print(self.get_name()+" "+str(self.tokens))
 
-    def hasatleat(nin):
+    def hasatleast(self,nin):
         return (self.tokens >= nin)
 
-    def get_tokens():
+    def get_tokens(self):
         return self.tokens
 
-    def set_tokens(value):
+    def set_tokens(self,value):
         self.tokens = value
 
-    def add_tokens(amount):
+    def add_tokens(self,amount):
         self.tokens += amount
+
+    def __str__(self):
+        return self.name
