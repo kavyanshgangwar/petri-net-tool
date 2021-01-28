@@ -1,0 +1,56 @@
+8
+P1
+1
+P2
+0
+P3
+0
+P4
+0
+P2
+0
+P6
+0
+P7
+0
+P8
+0
+5
+T1
+T2
+T3
+T4
+T5
+16
+A1
+0 0 input
+A2
+0 1 output
+A3
+0 2 output
+A4
+1 1 input
+A5
+2 1 input
+A6
+2 2 input
+A7
+1 3 output
+A8
+2 3 output
+A9
+2 4 output
+A10
+2 5 output
+A11
+3 3 input
+A12
+4 3 input
+A13
+4 4 input
+A14
+5 4 input
+A15
+3 6 output
+A16
+4 7 output
