@@ -5,8 +5,9 @@ from tokenslist import Tokenslist
 class Transition:
     """docstring for Transition."""
 
-    def __init__(self,name):
+    def __init__(self,name,lb):
         self.name = name
+        self.lambdai = lb
         self.incoming_arcs = []
         self.outgoing_arcs =[]
 

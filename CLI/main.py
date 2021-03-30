@@ -17,7 +17,8 @@ no_of_transitions = int(input('Enetr the no.of Transitions: '))
 
 for i in range(no_of_transitions):
     name = input('Enter name for Transition: ')
-    tmp_transition = Transition(name)
+    lb = int(input("Enter the lambda of transition: "))
+    tmp_transition = Transition(name,lb)
     p.add_transition(tmp_transition)
 
 no_of_arcs = int(input('Enter the no.of Arcs: '))
@@ -38,4 +39,7 @@ for i in range(no_of_arcs):
             tmp_arc.initialize(p.transitions[int(tmp_arc_details[0])],p.places[int(tmp_arc_details[1])],tmp_arc_details[2])
             p.transitions[int(tmp_arc_details[0])].add_arc(tmp_arc)
         p.add_arc(tmp_arc)
+print("the reachability graph is: ")
 p.reachability_graph()
+print("the Q matrix is: ")
+p.find_q_matrix()

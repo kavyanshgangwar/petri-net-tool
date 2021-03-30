@@ -16,6 +16,8 @@ class Petrinet:
         self.places = []
         self.transitions = []
         self.arcs = []
+        self.Q = []
+        self.states = []
 
     # function for adding places
     def add_place(self,place):
@@ -53,8 +55,9 @@ class Petrinet:
                      s[self.placeindex[arc.to]]=0
         return s
 
-    # function to find the reachability graph
-    def reachability_graph(self):
+
+    # helper function to find the reachability graph
+    def find_reachability_graph(self):
         queue = []
         vis = []
         graph_edges = []
@@ -71,7 +74,16 @@ class Petrinet:
                     graph_edges.append([u,v,transition])
                     if v not in vis:
                         queue.append(v)
+        if len(self.states) == 0:
+            self.states = vis[:]
+        return graph_edges
+
+
+    # function to find the reachability graph
+    def reachability_graph(self):
+        graph_edges = self.find_reachability_graph()
         self.print_graph(graph_edges)
+
 
     # function to print graph
     def print_graph(self,graph_edges):
@@ -79,3 +91,27 @@ class Petrinet:
             edge[0] = [str(x) for x in edge[0]]
             edge[1] = [str(x) for x in edge[1]]
             print("".join(edge[0])+" ---"+str(edge[2])+"---> "+"".join(edge[1]))
+
+    def find_q_matrix(self):
+        graph_edges = self.find_reachability_graph()
+        q1 = [0 for i in self.states]
+        self.q = [q1[:] for i in self.states]
+        for edge in graph_edges:
+            a=0
+            b=0
+            for i in range(len(self.states)):
+                if edge[0] == self.states[i]:
+                    a=i
+                if edge[1] == self.states[i]:
+                    b=i
+            self.q[a][b] += edge[2].lambdai
+        for i in range(len(self.states)):
+            sm = 0
+            for j in range(len(self.states)):
+                sm+=self.q[i][j]
+            self.q[i][i] = -1 * sm
+        for i in range(len(self.states)):
+            s = ""
+            for j in range(len(self.states)):
+                s =s+ str(self.q[i][j])+" "
+            print(s)
