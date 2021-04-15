@@ -19,6 +19,7 @@ class Petrinet:
         self.arcs = []
         self.Q = []
         self.states = []
+        self.PIE = []
 
     # function for adding places
     def add_place(self,place):
@@ -124,17 +125,23 @@ class Petrinet:
             for j in range(len(self.states)):
                 sm+=self.q[i][j]
             self.q[i][i] = -1 * sm
-        self.Q = (np.array(self.q)).T
-        print(self.Q)
-        eps = 1e-15
-        u, s, vh = np.linalg.svd(self.Q)
-        print(" s : \n", s)
-        print("\nvh:\n",vh)
-        null_space = np.compress(s <= eps, vh, axis=0)
-        print("\nnullspace:\n",null_space)
-        print("\noriginal matrix:\n",(u * s) @ vh)
+
+        self.Q = (np.array(self.q))
+
         for i in range(len(self.states)):
             s = ""
             for j in range(len(self.states)):
                 s =s+ str(self.q[i][j])+" "
             print(s)
+
+    def find_pie_vector(self):
+        eps = 1e-15
+        u, s, vh = np.linalg.svd(self.Q.T)
+        null_space = np.compress(s <= eps, vh, axis=0)
+        for i in range(null_space.shape[0]):
+            sm = 0
+            for x in null_space[i]:
+                sm+=x
+            null_space[i] = null_space[i] / sm
+        self.PIE = null_space
+        print(self.PIE)
