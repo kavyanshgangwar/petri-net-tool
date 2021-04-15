@@ -48,11 +48,16 @@ class Petrinet:
     def find_initial_state(self):
         n = len(self.places)
         s = [1 for x in range(n)]
+        for i in range(n):
+            s[i] = self.places[i].tokens
         self.placeindex = self.get_palce_index_mapping()
-        for arc in self.arcs:
-            if arc.status == "output":
-                if s[self.placeindex[arc.to]]==1:
-                     s[self.placeindex[arc.to]]=0
+        #
+        # for arc in self.arcs:
+        #     if arc.status == "output":
+        #         if s[self.placeindex[arc.to]]==1:
+        #              s[self.placeindex[arc.to]]=0
+        # print("intial state is:",s)
+        # s = [1,0,0,0,0]
         return s
 
 
@@ -64,6 +69,7 @@ class Petrinet:
         queue.append(self.find_initial_state())
         while len(queue) != 0:
             u = queue.pop(0)
+            # print("debug from queue is :",u)
             if u in vis:
                 continue
             else:
@@ -76,6 +82,7 @@ class Petrinet:
                         queue.append(v)
         if len(self.states) == 0:
             self.states = vis[:]
+        # print(graph_edges)
         return graph_edges
 
 
@@ -88,8 +95,14 @@ class Petrinet:
     # function to print graph
     def print_graph(self,graph_edges):
         for edge in graph_edges:
+            # print("from: ",edge[0])
+            # print("to: ",edge[1])
+            # print("transition: ",str(edge[2]))
             edge[0] = [str(x) for x in edge[0]]
             edge[1] = [str(x) for x in edge[1]]
+            # print("".join(edge[0]),end = " --- ")
+            # print(str(edge[2].name),end = " ---> ")
+            # print("".join(edge[1]))
             print("".join(edge[0])+" ---"+str(edge[2])+"---> "+"".join(edge[1]))
 
     def find_q_matrix(self):
