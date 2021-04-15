@@ -11,6 +11,7 @@ Step-2
 from Place import Place
 from Arc import Arc
 from Transition import Transition
+import numpy as np
 class Petrinet:
     def __init__(self):
         self.places = []
@@ -53,6 +54,7 @@ class Petrinet:
             if arc.status == "output":
                 if s[self.placeindex[arc.to]]==1:
                      s[self.placeindex[arc.to]]=0
+        # s = [1,0,0,0,0]
         return s
 
 
@@ -110,6 +112,15 @@ class Petrinet:
             for j in range(len(self.states)):
                 sm+=self.q[i][j]
             self.q[i][i] = -1 * sm
+        self.Q = (np.array(self.q)).T
+        print(self.Q)
+        eps = 1e-15
+        u, s, vh = np.linalg.svd(self.Q)
+        print(" s : \n", s)
+        print("\nvh:\n",vh)
+        null_space = np.compress(s <= eps, vh, axis=0)
+        print("\nnullspace:\n",null_space)
+        print("\noriginal matrix:\n",(u * s) @ vh)
         for i in range(len(self.states)):
             s = ""
             for j in range(len(self.states)):
