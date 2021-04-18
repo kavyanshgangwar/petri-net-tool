@@ -1,7 +1,0 @@
-
-class Tokenslist():
-    """docstring for Tokenslist."""
-
-    def __init__(self):
-        self.lst = []
-    def hasatleast(Place place)
