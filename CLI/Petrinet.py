@@ -122,7 +122,7 @@ class Petrinet:
             self.q[a][b] += edge[2].lambdai
         for i in range(len(self.states)):
             sm = 0
-            for j in range(len(self.states)):
+            for j in range(len(self.states)): 
                 sm+=self.q[i][j]
             self.q[i][i] = -1 * sm
 
