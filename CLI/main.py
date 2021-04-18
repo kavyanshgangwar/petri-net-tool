@@ -40,26 +40,31 @@ for i in range(no_of_arcs):
             tmp_arc.initialize(p.transitions[int(tmp_arc_details[0])],p.places[int(tmp_arc_details[1])],tmp_arc_details[2])
             p.transitions[int(tmp_arc_details[0])].add_arc(tmp_arc)
         p.add_arc(tmp_arc)
-print("The reachability graph is: ")
+print("\nThe reachability graph is: ")
 p.reachability_graph()
 
-print("The Q matrix is: ")
+print("\nThe Q matrix is: ")
 p.find_q_matrix()
 
-print("The pie vector is: ")
+print("\nThe pie vector is: ")
 p.find_pie_vector()
+
+
+print("\n==== there can be more than one pie vectors in which case most of the metrics will contain multiple values. each value will be indexed according to the index of pie vector used to compute it. ====\n")
 
 for i in range(len(p.places)):
     print("The Mean no.of Tokens at place "+ p.places[i].name +" is : ")
-    res = p.get_mean_tokens_place(p.places[1])
+    res = p.get_mean_tokens_place(p.places[i])
     print((res))
 
+print("")
 for i in range(len(p.transitions)):
     print("The Probability of firing transition "+p.transitions[i].name+" is:")
-    res = p.probability_firing_trans(p.transitions[3])
+    res = p.probability_firing_trans(p.transitions[i])
     print(res)
-
+print("")
 for i in range(len(p.transitions)):
     print("The throughtput for transition "+p.transitions[i].name +" is:")
-    res = p.Throughtput(p.transitions[3])
+    res = p.Throughtput(p.transitions[i])
     print(res)
+print("")
