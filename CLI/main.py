@@ -2,8 +2,9 @@ from Arc import Arc
 from Transition import Transition
 from Place import Place
 from Petrinet import Petrinet
+from complete import Complete
 import sys
-p = Petrinet() # creaating a petrinet obj.
+p = Complete() # creaating a petrinet obj.
 
 no_of_places = int(input('Enter the no.of Places: '))
 
@@ -39,9 +40,14 @@ for i in range(no_of_arcs):
             tmp_arc.initialize(p.transitions[int(tmp_arc_details[0])],p.places[int(tmp_arc_details[1])],tmp_arc_details[2])
             p.transitions[int(tmp_arc_details[0])].add_arc(tmp_arc)
         p.add_arc(tmp_arc)
-print("the reachability graph is: ")
+print("The reachability graph is: ")
 p.reachability_graph()
-print("the Q matrix is: ")
+print("The Q matrix is: ")
 p.find_q_matrix()
-print("the pie vector is: ")
+print("The pie vector is: ")
 p.find_pie_vector()
+print("The states are :")
+print(p.states)
+print("The Mean no.of Tokens at place P2 is :",end="")
+res = p.get_mean_tokens_place(p.places[1])
+print((res))
