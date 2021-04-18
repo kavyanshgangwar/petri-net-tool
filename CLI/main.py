@@ -42,12 +42,24 @@ for i in range(no_of_arcs):
         p.add_arc(tmp_arc)
 print("The reachability graph is: ")
 p.reachability_graph()
+
 print("The Q matrix is: ")
 p.find_q_matrix()
+
 print("The pie vector is: ")
 p.find_pie_vector()
-print("The states are :")
-print(p.states)
-print("The Mean no.of Tokens at place P2 is :",end="")
-res = p.get_mean_tokens_place(p.places[1])
-print((res))
+
+for i in range(len(p.places)):
+    print("The Mean no.of Tokens at place "+ p.places[i].name +" is : ")
+    res = p.get_mean_tokens_place(p.places[1])
+    print((res))
+
+for i in range(len(p.transitions)):
+    print("The Probability of firing transition "+p.transitions[i].name+" is:")
+    res = p.probability_firing_trans(p.transitions[3])
+    print(res)
+
+for i in range(len(p.transitions)):
+    print("The throughtput for transition "+p.transitions[i].name +" is:")
+    res = p.Throughtput(p.transitions[3])
+    print(res)
