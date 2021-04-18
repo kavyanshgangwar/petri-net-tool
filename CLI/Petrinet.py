@@ -11,11 +11,15 @@ Step-2
 from Place import Place
 from Arc import Arc
 from Transition import Transition
+import numpy as np
 class Petrinet:
     def __init__(self):
         self.places = []
         self.transitions = []
         self.arcs = []
+        self.Q = []
+        self.states = []
+        self.PIE = []
 
     # function for adding places
     def add_place(self,place):
@@ -46,21 +50,28 @@ class Petrinet:
     def find_initial_state(self):
         n = len(self.places)
         s = [1 for x in range(n)]
+        for i in range(n):
+            s[i] = self.places[i].tokens
         self.placeindex = self.get_palce_index_mapping()
-        for arc in self.arcs:
-            if arc.status == "output":
-                if s[self.placeindex[arc.to]]==1:
-                     s[self.placeindex[arc.to]]=0
+        #
+        # for arc in self.arcs:
+        #     if arc.status == "output":
+        #         if s[self.placeindex[arc.to]]==1:
+        #              s[self.placeindex[arc.to]]=0
+        # print("intial state is:",s)
+        # s = [1,0,0,0,0]
         return s
 
-    # function to find the reachability graph
-    def reachability_graph(self):
+
+    # helper function to find the reachability graph
+    def find_reachability_graph(self):
         queue = []
         vis = []
         graph_edges = []
         queue.append(self.find_initial_state())
         while len(queue) != 0:
             u = queue.pop(0)
+            # print("debug from queue is :",u)
             if u in vis:
                 continue
             else:
@@ -71,11 +82,66 @@ class Petrinet:
                     graph_edges.append([u,v,transition])
                     if v not in vis:
                         queue.append(v)
+        if len(self.states) == 0:
+            self.states = vis[:]
+        # print(graph_edges)
+        return graph_edges
+
+
+    # function to find the reachability graph
+    def reachability_graph(self):
+        graph_edges = self.find_reachability_graph()
         self.print_graph(graph_edges)
+
 
     # function to print graph
     def print_graph(self,graph_edges):
         for edge in graph_edges:
+            # print("from: ",edge[0])
+            # print("to: ",edge[1])
+            # print("transition: ",str(edge[2]))
             edge[0] = [str(x) for x in edge[0]]
             edge[1] = [str(x) for x in edge[1]]
+            # print("".join(edge[0]),end = " --- ")
+            # print(str(edge[2].name),end = " ---> ")
+            # print("".join(edge[1]))
             print("".join(edge[0])+" ---"+str(edge[2])+"---> "+"".join(edge[1]))
+
+    def find_q_matrix(self):
+        graph_edges = self.find_reachability_graph()
+        q1 = [0 for i in self.states]
+        self.q = [q1[:] for i in self.states]
+        for edge in graph_edges:
+            a=0
+            b=0
+            for i in range(len(self.states)):
+                if edge[0] == self.states[i]:
+                    a=i
+                if edge[1] == self.states[i]:
+                    b=i
+            self.q[a][b] += edge[2].lambdai
+        for i in range(len(self.states)):
+            sm = 0
+            for j in range(len(self.states)): 
+                sm+=self.q[i][j]
+            self.q[i][i] = -1 * sm
+
+        self.Q = (np.array(self.q))
+
+        for i in range(len(self.states)):
+            s = ""
+            for j in range(len(self.states)):
+                s =s+ str(self.q[i][j])+" "
+            print(s)
+
+    def find_pie_vector(self):
+        eps = 1e-15
+        u, s, vh = np.linalg.svd(self.Q.T)
+        null_space = np.compress(s <= eps, vh, axis=0)
+        for i in range(null_space.shape[0]):
+            sm = 0
+            for x in null_space[i]:
+                sm+=x
+            null_space[i] = null_space[i] / sm
+        self.PIE = null_space
+        print(self.PIE)
