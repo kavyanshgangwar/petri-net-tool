@@ -41,3 +41,33 @@ class Complete(Petrinet):
                     markings.append(state)
             res = np.add(res,token_no * self.get_subset_prob(markings))
         return res
+
+    def find_transition_subset(self,trans):
+        markings = []
+        for state in self.states:
+            if trans.can_fire(state,self.placeindex):
+                markings.append(state)
+        return markings
+
+    def probability_firing_trans(self,trans):
+        size = len(self.PIE)
+        res = np.zeros((size))
+        markings = self.find_transition_subset(trans)
+        for marking in markings:
+            mark_index = self.get_index(marking)
+            temp = self.get_subset_prob([marking])
+            temp = temp / (-self.Q[mark_index][mark_index])
+            res = np.add(res,temp)
+        res = res * trans.lambdai
+        return res
+
+    def  Throughtput(self,trans):
+        size = len(self.PIE)
+        res = np.zeros((size))
+        markings = self.find_transition_subset(trans)
+        # print("markings are:",markings)
+        # print(trans.lambdai)
+        res = self.get_subset_prob(markings)
+        # print("res from previous is:",res)
+        res = res*trans.lambdai
+        return res
